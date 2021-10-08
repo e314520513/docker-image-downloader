@@ -1,13 +1,13 @@
 
 tasks:
-  - name: init
-    init: |
-      go get github.com/spf13/cobra/cobra
-      go build
-      
-    command: |
-      ./mycli --help
-      touch file1
+  - init: echo 'init script' # runs during prebuild
+    command: echo 'start script'
+
+# List the ports to expose. Learn more https://www.gitpod.io/docs/config-ports/
+ports:
+  - port: 8080
+    onOpen: open-preview
+
 vscode:
   extensions:
     - golang.go
