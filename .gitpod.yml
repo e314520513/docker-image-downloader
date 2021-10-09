@@ -8,14 +8,17 @@ github:
     addComment: false
     addLabel: prebuild-in-gitpod
 tasks:
-  - name: startup-web-server
-    before: touch file.before
-    init: touch file.init
-    command: touch file.cmd
+  - name: init
+    command: >
+      docker-compose up -d
+      go install
+      air
 # List the ports to expose. Learn more https://www.gitpod.io/docs/config-ports/
 ports:
   - port: 8080
     onOpen: open-preview
+  - port: 3306
+    onOpen: ignore  
 
 vscode:
   extensions:
