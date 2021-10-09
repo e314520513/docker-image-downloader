@@ -9,7 +9,7 @@ github:
     addLabel: prebuild-in-gitpod
 tasks:
   - name: init
-    command: >
+    command: |
       docker-compose up -d
       go install
       air
