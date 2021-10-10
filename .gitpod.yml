@@ -14,14 +14,11 @@ tasks:
       go install
       go get -u github.com/cosmtrek/air
     command: |
-      docker-compose up -d
       air
 # List the ports to expose. Learn more https://www.gitpod.io/docs/config-ports/
 ports:
   - port: 8080
-    onOpen: open-preview
-  - port: 3306
-    onOpen: ignore  
+    onOpen: open-preview 
 
 vscode:
   extensions:
