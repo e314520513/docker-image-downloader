@@ -1,13 +1,14 @@
 {{ define "Index" }}
   {{ template "Header" }}
     {{ template "Menu"  }}
-    <h2> Registered </h2>
+    {{ template "SearchBar"  }}
+    <h2> Docker Images You Can Download Below </h2>
     <table border="1">
       <thead>
       <tr>
         <td>ID</td>
         <td>Name</td>
-        <td>City</td>
+        <td>link</td>
         <td>View</td>
         <td>Edit</td>
         <td>Delete</td>

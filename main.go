@@ -2,9 +2,11 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
+	"os/exec"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -103,21 +105,47 @@ func Index(w http.ResponseWriter, r *http.Request) {
 // 	defer db.Close()
 // }
 
-// func Insert(w http.ResponseWriter, r *http.Request) {
-// 	db := dbConn()
-// 	if r.Method == "POST" {
-// 		name := r.FormValue("name")
-// 		city := r.FormValue("city")
-// 		insForm, err := db.Prepare("INSERT INTO Employee(name, city) VALUES(?,?)")
-// 		if err != nil {
-// 			panic(err.Error())
-// 		}
-// 		insForm.Exec(name, city)
-// 		log.Println("INSERT: Name: " + name + " | City: " + city)
-// 	}
-// 	defer db.Close()
-// 	http.Redirect(w, r, "/", 301)
-// }
+func Download(w http.ResponseWriter, r *http.Request) {
+	db := dbConn()
+
+	if r.Method == "POST" {
+
+		name := r.FormValue("name")
+		pullImage(name)
+		saveImage(name)
+		link := "1"
+		insForm, err := db.Prepare("INSERT INTO docker_images(name, link) VALUES(?,?)")
+		if err != nil {
+			panic(err.Error())
+		}
+		insForm.Exec(name, link)
+		log.Println("INSERT: Name: " + name + " | Link: " + link)
+	}
+	defer db.Close()
+	http.Redirect(w, r, "/", 301)
+}
+
+func pullImage(imageName string) {
+	cmd := exec.Command("docker", "pull", imageName)
+	stdout, err := cmd.Output()
+
+	if err != nil {
+		fmt.Println(err.Error())
+
+	}
+	log.Print(string(stdout))
+}
+
+func saveImage(imageName string) {
+	cmd := exec.Command("docker", "save", "-o", "dockerImages/"+imageName, imageName)
+	stdout, err := cmd.Output()
+
+	if err != nil {
+		fmt.Println(err.Error())
+
+	}
+	log.Print(string(stdout))
+}
 
 // func Update(w http.ResponseWriter, r *http.Request) {
 // 	db := dbConn()
@@ -136,27 +164,28 @@ func Index(w http.ResponseWriter, r *http.Request) {
 // 	http.Redirect(w, r, "/", 301)
 // }
 
-// func Delete(w http.ResponseWriter, r *http.Request) {
-// 	db := dbConn()
-// 	emp := r.URL.Query().Get("id")
-// 	delForm, err := db.Prepare("DELETE FROM Employee WHERE id=?")
-// 	if err != nil {
-// 		panic(err.Error())
-// 	}
-// 	delForm.Exec(emp)
-// 	log.Println("DELETE")
-// 	defer db.Close()
-// 	http.Redirect(w, r, "/", 301)
-// }
+func Delete(w http.ResponseWriter, r *http.Request) {
+	db := dbConn()
+	emp := r.URL.Query().Get("id")
+	delForm, err := db.Prepare("DELETE FROM docker_images WHERE id=?")
+	if err != nil {
+		panic(err.Error())
+	}
+	delForm.Exec(emp)
+	log.Println("DELETE")
+	defer db.Close()
+	http.Redirect(w, r, "/", 301)
+}
 
 func main() {
+
 	log.Println("Server started on: http://localhost:8080")
 	http.HandleFunc("/", Index)
 	// http.HandleFunc("/show", Show)
 	// http.HandleFunc("/new", New)
 	// http.HandleFunc("/edit", Edit)
-	// http.HandleFunc("/insert", Insert)
+	http.HandleFunc("/download", Download)
 	// http.HandleFunc("/update", Update)
-	// http.HandleFunc("/delete", Delete)
+	http.HandleFunc("/delete", Delete)
 	http.ListenAndServe(":8080", nil)
 }
