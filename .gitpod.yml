@@ -13,6 +13,7 @@ tasks:
     init: |
       go install
       go get -u github.com/cosmtrek/air
+      mysql -e "create database golang"
       mysql golang < database/docker_images.sql
     command: |
       air
