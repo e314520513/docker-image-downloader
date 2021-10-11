@@ -1,6 +1,5 @@
 {{ define "Index" }}
   {{ template "Header" }}
-    {{ template "Menu"  }}
     {{ template "SearchBar"  }}
     <h2> Docker Images You Can Download Below </h2>
     <table border="1">
@@ -8,9 +7,7 @@
       <tr>
         <td>ID</td>
         <td>Name</td>
-        <td>link</td>
-        <td>View</td>
-        <td>Edit</td>
+        <td>Link</td>
         <td>Delete</td>
       </tr>
        </thead>
@@ -19,10 +16,8 @@
       <tr>
         <td>{{ .Id }}</td>
         <td> {{ .Name }} </td>
-        <td>{{ .City }} </td> 
-        <td><a href="/show?id={{ .Id }}">View</a></td>
-        <td><a href="/edit?id={{ .Id }}">Edit</a></td>
-        <td><a href="/delete?id={{ .Id }}">Delete</a><td>
+        <td><a href="/download?id={{ .Id }}">download</a></td> 
+        <td><a href="/delete?id={{ .Id }}&link={{ .Link}}">Delete</a></td>
       </tr>
     {{ end }}
        </tbody>
