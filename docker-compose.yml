@@ -1,22 +1,5 @@
 version: '3'
 services:
-  web:
-    build:
-      context: .
-      dockerfile: dockerimages/web/Dockerfile
-    # ports from container exposed to the docker machine and the guest machine
-    ports:
-      # 80 on the host, 8080 on the guest. Websever listens on 8080
-      - "80:8080" # http
-    # file with environment declarations for the container
-    env_file:
-      - dockerimages/web/.env
-    # Link to containers in another service
-    links:
-      - db
-    # sync workspace folder with /go
-    volumes:
-     - ./src:/go
   db:
     image: mysql:5.7
     ports:
@@ -30,3 +13,4 @@ services:
     # folder is at workspace root.
     volumes:
       - ./database/local_mysql_data:/var/lib/mysql
+      - ./database/docker_images.sql:/app/docker_images.sql  

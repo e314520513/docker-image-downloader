@@ -29,7 +29,9 @@ func dbConn() (db *sql.DB) {
 	dbDriver := "mysql"
 	dbUser := "root"
 	dbName := "golang"
-	db, err := sql.Open(dbDriver, dbUser+":@/"+dbName)
+	dbPassword :="golang"
+	protocal := ""
+	db, err := sql.Open(dbDriver, dbUser+":"+dbPassword+"@"+protocal+"/"+dbName)
 	if err != nil {
 		panic(err.Error())
 	}
