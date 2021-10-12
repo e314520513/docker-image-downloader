@@ -16,7 +16,7 @@ tasks:
       mysql -e "create database golang"
       mysql golang < database/docker_images.sql
     command: |
-
+      cd src
       air
 # List the ports to expose. Learn more https://www.gitpod.io/docs/config-ports/
 ports:
@@ -26,4 +26,3 @@ ports:
 vscode:
   extensions:
     - golang.go
-workspaceLocation: "src/"
