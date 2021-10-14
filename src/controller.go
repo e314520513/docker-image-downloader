@@ -17,7 +17,7 @@ import (
 )
 
 const imageDir = "dockerImages/"
-const imageExt = ".tar"
+const imageExt = ".tar.gz"
 
 type Images struct {
 	Id   int
@@ -172,7 +172,9 @@ func Search(w http.ResponseWriter, r *http.Request) {
 				panic(err.Error())
 			}
 
-			insForm.Exec(name, imagePath)
+			if _, execErr := insForm.Exec(name, imagePath);execErr != nil{
+				panic(execErr.Error())
+			}
 			log.Println("pulled it! Name: " + name + " | Link: " + imagePath)
 		}
 
@@ -194,9 +196,17 @@ func saveImage(name string) (string, bool) {
 	log.Println("saving image")
 
 	imagePath := imageDir + strings.Replace(name, "/", "_", -1) + imageExt
+
 	fileinfo, _ := os.Stat(imagePath)
+
 	if fileinfo == nil {
+		if err := os.Mkdir(imageDir, 0755); err != nil {
+			log.Println(err)
+		}
+
 		cmd := exec.Command("/bin/bash", "-c", "docker save -o "+imagePath+" "+name)
+		execCMD(cmd)
+		cmd = exec.Command("/bin/bash", "-c", "tar -zcvf "+imagePath+" "+imagePath)
 		execCMD(cmd)
 		exported = true
 	}
