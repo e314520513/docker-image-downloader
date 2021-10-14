@@ -25,4 +25,4 @@ ports:
 
 vscode:
   extensions:
-    - golang.go
+    - golang.g
