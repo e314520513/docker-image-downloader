@@ -17,7 +17,7 @@ import (
 )
 
 const imageDir = "dockerImages/"
-const imageExt = ".tar.gz"
+const imageExt = ".gz"
 
 type Images struct {
 	Id   int
@@ -206,8 +206,9 @@ func saveImage(name string) (string, bool) {
 
 		cmd := exec.Command("/bin/bash", "-c", "docker save -o "+imagePath+" "+name)
 		execCMD(cmd)
-		cmd = exec.Command("/bin/bash", "-c", "tar -zcvf "+imagePath+" "+imagePath)
+		cmd = exec.Command("/bin/bash", "-c", "gzip "+imagePath)
 		execCMD(cmd)
+		imagePath = imagePath+imageExt
 		exported = true
 	}
 
