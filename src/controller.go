@@ -13,7 +13,7 @@ import (
 	"strings"
 	"time"
 	_ "github.com/go-sql-driver/mysql"
-	"docker-image-downloader/helpers"
+	"pull-docker-image/helpers"
 )
 
 const imageDir = "dockerImages/"
