@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"database/sql"
 	"html/template"
 	"io/ioutil"
 	"log"
@@ -12,7 +11,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	_ "github.com/go-sql-driver/mysql"
 	"pull-docker-image/helpers"
 )
 
@@ -30,7 +28,7 @@ type Images struct {
 var tmpl = template.Must(template.ParseGlob("form/*"))
 
 func Index(w http.ResponseWriter, r *http.Request) {
-	db := helpers.dbConn()
+	db := helpers.DbConn()
 	selDB, err := db.Query("SELECT * FROM docker_images ORDER BY id DESC")
 
 	if err != nil {
@@ -55,7 +53,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 }
 
 // func Show(w http.ResponseWriter, r *http.Request) {
-// 	db := helpers.dbConn()
+// 	db := helpers.DbConn()
 // 	nId := r.URL.Query().Get("id")
 // 	selDB, err := db.Query("SELECT * FROM Employee WHERE id=?", nId)
 // 	if err != nil {
@@ -82,7 +80,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 // }
 
 // func Edit(w http.ResponseWriter, r *http.Request) {
-// 	db := helpers.dbConn()
+// 	db := helpers.DbConn()
 // 	nId := r.URL.Query().Get("id")
 // 	selDB, err := db.Query("SELECT * FROM Employee WHERE id=?", nId)
 // 	if err != nil {
@@ -104,7 +102,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 // 	defer db.Close()
 // }
 func Download(w http.ResponseWriter, r *http.Request) {
-	db := helpers.dbConn()
+	db := helpers.DbConn()
 	nId := r.URL.Query().Get("id")
 	selDB, err := db.Query("SELECT * FROM docker_images where id=?", nId)
 
@@ -145,7 +143,7 @@ func Download(w http.ResponseWriter, r *http.Request) {
 
 }
 func Search(w http.ResponseWriter, r *http.Request) {
-	db := helpers.dbConn()
+	db := helpers.DbConn()
 
 	if r.Method == "POST" {
 
@@ -230,7 +228,7 @@ func execCMD(cmd *exec.Cmd) {
 }
 
 // func Update(w http.ResponseWriter, r *http.Request) {
-// 	db := helpers.dbConn()
+// 	db := helpers.DbConn()
 // 	if r.Method == "POST" {
 // 		name := r.FormValue("name")
 // 		city := r.FormValue("city")
@@ -249,7 +247,7 @@ func execCMD(cmd *exec.Cmd) {
 func Delete(w http.ResponseWriter, r *http.Request) {
 	imagePath := r.URL.Query().Get("link")
 
-	db := helpers.dbConn()
+	db := helpers.DbConn()
 	emp := r.URL.Query().Get("id")
 	delForm, err := db.Prepare("DELETE FROM docker_images WHERE id=?")
 	if err != nil {

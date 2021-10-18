@@ -5,7 +5,7 @@ import(
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 )
-func dbConn() (db *sql.DB) {
+func DbConn() (db *sql.DB) {
 	dbDriver := "mysql"
 	dbUser := "root"
 	dbName := "golang"
