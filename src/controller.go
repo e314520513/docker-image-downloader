@@ -183,7 +183,7 @@ func saveImage(name string) (string, bool) {
 	var exported = false
 	log.Println("saving image")
 
-	imagePath := imageDir + strings.Replace(name, "/", "_", -1) + imageExt
+	imagePath := imageDir + strings.Replace(name, "/", "_", -1)
 
 	fileinfo, _ := os.Stat(imagePath)
 
