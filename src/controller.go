@@ -152,7 +152,8 @@ func Search(w http.ResponseWriter, r *http.Request) {
 		imagePath, exported := saveImage(name)
 
 		_, err := os.Stat(imagePath)
-
+		log.Println(err)
+		log.Println(exported)
 		if err == nil && exported {
 			insForm, err := db.Prepare("INSERT INTO docker_images(name, link) VALUES(?,?)")
 			if err != nil {
